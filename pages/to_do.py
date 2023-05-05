@@ -16,7 +16,7 @@ with selectbox_container.container():
 
 
 st.session_state.yl_bjgs = []
-st.session_state.major_data= []
+st.session_state.major_data= pd.DataFrame()
 
 st.session_state.file_map = {}
 
@@ -49,7 +49,7 @@ left_column, right_column = st.columns(2)
 ddl_button = left_column.button('生成DDL')
 if ddl_button:
     ddl_all_sql = ''
-    for bjg in st.session_state.yl_bjgs:
+    for table in st.session_state.yl_bjgs:
         ddl_sql = ''
         tab_ddl = ''
         drop_table = 'DROP TABLE IF EXISTS '
@@ -57,18 +57,17 @@ if ddl_button:
         cols_ddl = ''
         tab_comment = ''
         primaryKey = ''
-        for j in range(0, len(bjg)):  # 逐行读取excel
-            if (j == 0):
-                tab_name = '`' + str(bjg['表名'][j]).strip() + '`'
-                tab_comment = "COMMENT='" + bjg['表注释'][j] + "'"
-            colName = '`' + str(bjg['字段名'][j]).strip() + '`'
-            colType = bjg['字段类型'][j]
-            isNull = 'NOT NULL' if str(bjg['是否可为空'][j]).strip() == 'N' else ' '
+        for index, bjg in table.iterrows():
+            tab_name = '`' + str(bjg['表名']).strip() + '`'
+            tab_comment = "COMMENT='" + bjg['表注释'] + "'"
+            colName = '`' + str(bjg['字段名']).strip() + '`'
+            colType = bjg['字段类型']
+            isNull = 'NOT NULL' if str(bjg['是否可为空']).strip() == 'N' else ' '
             defaultValue = 'DEFAULT ' + \
-                bjg['默认值'][j] if str(bjg['默认值'][j]) != 'nan' else ''
-            comment = "COMMENT '" + bjg['字段注释'][j] + "'"
-            primaryKey1 = '`' + str(bjg['字段名'][j]).strip() + '`' if str(
-                bjg['是否主键'][j]).strip() == 'Y' else ''
+                bjg['默认值'] if str(bjg['默认值']) != 'nan' else ''
+            comment = "COMMENT '" + str(bjg['字段注释']) + "'"
+            primaryKey1 = '`' + str(bjg['字段名']).strip() + '`' if str(
+                bjg['是否主键']).strip() == 'Y' else ''
             if len(primaryKey1) > 0:
                 primaryKey = primaryKey + ',' + \
                     primaryKey1 if len(primaryKey) > 0 else primaryKey1
