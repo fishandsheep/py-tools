@@ -23,7 +23,6 @@ st.session_state.file_map = {}
 if uploaded_file is not None:
     # 读取 Excel 文件并打开为 ExcelFile 对象
     excel_file = pd.ExcelFile(uploaded_file)
-    excel_file.sheet_names
     # 获取所有 sheet 页的名称列表
     st.session_state.sheet_names.extend(excel_file.sheet_names)
     selectbox_container.empty()
@@ -34,6 +33,7 @@ if uploaded_file is not None:
             uploaded_file, st.session_state.sheet_name)
         # 获取主sheet页中的清单信息
         st.session_state.major_data = major_data.query('本次是否建表 =="Y"')
+        st.session_state.major_data
         # 获取其他表中的全部数据
         ddl_sheet_list = list(filter(lambda x: x != st.session_state.sheet_name, excel_file.sheet_names))
         for ddl_sheet_name in ddl_sheet_list:
