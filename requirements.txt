@@ -1,0 +1,4 @@
+# python==3.8.10
+pandas==1.5.3
+Pillow==9.5.0
+streamlit==1.21.0
