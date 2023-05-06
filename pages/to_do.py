@@ -63,9 +63,13 @@ if ddl_button:
             colName = '`' + str(bjg['字段名']).strip() + '`'
             colType = bjg['字段类型']
             isNull = 'NOT NULL' if str(bjg['是否可为空']).strip() == 'N' else ' '
-            defaultValue = 'DEFAULT ' + \
-                bjg['默认值'] if str(bjg['默认值']) != 'nan' else ''
-            comment = "COMMENT '" + str(bjg['字段注释']) + "'"
+
+            defaultValue = ''
+            default = bjg['默认值'] if str(bjg['默认值']) != 'nan' else ''
+            if default != '':
+                defaultValue = "DEFAULT '" + default + "'"
+            
+            comment = "COMMENT '" + (bjg['字段注释'] if str(bjg['字段注释']) != 'nan' else '') + "'"
             primaryKey1 = '`' + str(bjg['字段名']).strip() + '`' if str(
                 bjg['是否主键']).strip() == 'Y' else ''
             if len(primaryKey1) > 0:
