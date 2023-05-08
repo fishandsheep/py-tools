@@ -1,8 +1,7 @@
 import streamlit as st
 import requests
 import json
-import schedule
-import time
+
 
 st.header('浪姐4投票排行👩‍🎤')
 st.caption('实时更新')
