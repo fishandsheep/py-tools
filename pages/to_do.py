@@ -43,6 +43,7 @@ if uploaded_file is not None:
 for index, row in st.session_state.major_data.iterrows():
     current_sheet = st.session_state.file_map[row['所属层级']]
     current_table = current_sheet.query('表名 == "{}"'.format(row['表名']))
+    current_table['表注释'] = row['表注释']
     st.session_state.yl_bjgs.append(current_table)
 
 left_column, right_column = st.columns(2)
@@ -78,9 +79,21 @@ if ddl_button:
             col_ddl = colName + ' ' + colType + ' ' + isNull + \
                 ' ' + defaultValue + ' ' + comment + ',\n'
             cols_ddl += col_ddl
-        tab_ddl += drop_table + tab_name + ';\n' + 'CREATE TABLE ' + tab_name + \
-            '(\n' + cols_ddl + 'PRIMARY KEY (' + primaryKey + ')\n' + ') ' + \
+
+        primaryLine = ''
+        if len(primaryKey) > 0:
+           primaryLine = 'PRIMARY KEY (' + primaryKey + ')\n'
+
+        if len(primaryLine) > 0:
+            tab_ddl += drop_table + tab_name + ';\n' + 'CREATE TABLE ' + tab_name + \
+            '(\n' + cols_ddl + primaryLine + ') ' + \
             tab_comment + ';'
+        else:
+            cols_ddl = cols_ddl[:-2] + '\n'
+            tab_ddl += drop_table + tab_name + ';\n' + 'CREATE TABLE ' + tab_name + \
+            '(\n' + cols_ddl  + ') ' + \
+            tab_comment + ';'
+
         ddl_sql = ddl_sql + tab_ddl + '\n\n' if len(tab_ddl) > 0 else ddl_sql
         ddl_all_sql += ddl_sql
     st.code(ddl_all_sql, language='sql')

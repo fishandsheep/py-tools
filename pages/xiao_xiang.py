@@ -11,7 +11,9 @@ st.image(image, caption='xiang xiang')
 
 
 with st.empty():
-    for seconds in range(60):
-        st.write(f"⏳ {seconds} seconds have passed")
-        time.sleep(1)
-    st.write("✔️ 1 minute over!")
+    while True:
+        for seconds in range(10):
+            st.write(f"⏳ {10-seconds} seconds have passed")
+            time.sleep(1)
+            if seconds == 9:
+                seconds = 0
