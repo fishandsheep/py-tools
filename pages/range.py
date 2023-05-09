@@ -49,7 +49,7 @@ st.vega_lite_chart([{'char_name':'美依礼芽','vote_num':mr_vote_num},
 
 # mr_vote_num/(mr_vote_num+other_vote_num)
 rounded_num = round((mr_vote_num/(mr_vote_num+other_vote_num))*100, 2)
-st.markdown("### MARiA/others:{}%".format(rounded_num))
+st.markdown("### MARiA/ALL:{}%".format(rounded_num))
 
 
 # st.vega_lite_chart(character_list, {
