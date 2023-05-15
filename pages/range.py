@@ -8,7 +8,7 @@ st.caption('实时更新')
 
 st.session_state.data = {}
 
-url = "https://vipact.api.mgtv.com/api/v1/act/vote/charlist?ticket=38C62876365D3735884DD5E85DDCF8ED&act_name=20230414cf2023&count=50&invoker=mobile-zhifubao&_dx_const_id=6458582d2U7qZfDYzYhpOCgP3J0ePBqHG7DvcGR1&_dx_seq_id=f4504e69-9510-9d4d-a0c2-f85c378b633a&v=v4"
+url = "https://vipact.api.mgtv.com/api/v1/act/vote/charlist?act_name=20230414cf2023&count=33"
 response = requests.get(url)
 st.session_state.data = json.loads(response.text)   
 
