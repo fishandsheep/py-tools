@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 import json
 
 def flatten_objects_recursive(data):
@@ -29,9 +28,6 @@ if uploaded_file is not None:
     parse_data = flatten_objects_recursive(json.load(uploaded_file))
 
 yl_button = st.button('转换预览')
-
-st.download_button(
-    '下载excel', st.session_state.text_contents, 'demo' + '_ddl.sql')
 
 if  yl_button:
     # 解析json对象
