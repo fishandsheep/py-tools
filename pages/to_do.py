@@ -12,11 +12,10 @@ selectbox_container = st.empty()
 with selectbox_container.container():
     st.session_state.sheet_names = ['请选择主sheet']
     st.session_state.sheet_name = st.selectbox(
-    '', st.session_state.sheet_names)
-
+        '', st.session_state.sheet_names)
 
 st.session_state.yl_bjgs = []
-st.session_state.major_data= pd.DataFrame()
+st.session_state.major_data = pd.DataFrame()
 
 st.session_state.file_map = {}
 
@@ -42,7 +41,7 @@ if uploaded_file is not None:
 # 遍历可生成 DDL的 sheet
 for index, row in st.session_state.major_data.iterrows():
     current_sheet = st.session_state.file_map[row['所属层级']]
-    current_table = current_sheet.query('表名 == "{}"'.format(row['表名']))
+    current_table = current_sheet.query('表名== "{}"'.format(row['表名']))
     current_table['表注释'] = row['表注释']
     st.session_state.yl_bjgs.append(current_table)
 
@@ -69,30 +68,34 @@ if ddl_button:
             default = bjg['默认值'] if str(bjg['默认值']) != 'nan' else ''
             if default != '':
                 defaultValue = "DEFAULT '" + default + "'"
-            
+                if default.upper() == "CURRENT_TIMESTAMP":
+                    print('DATE')
+                    defaultValue = "DEFAULT " + default + ""
+
+
             comment = "COMMENT '" + (bjg['字段注释'] if str(bjg['字段注释']) != 'nan' else '') + "'"
             primaryKey1 = '`' + str(bjg['字段名']).strip() + '`' if str(
                 bjg['是否主键']).strip() == 'Y' else ''
             if len(primaryKey1) > 0:
                 primaryKey = primaryKey + ',' + \
-                    primaryKey1 if len(primaryKey) > 0 else primaryKey1
+                             primaryKey1 if len(primaryKey) > 0 else primaryKey1
             col_ddl = colName + ' ' + colType + ' ' + isNull + \
-                ' ' + defaultValue + ' ' + comment + ',\n'
+                      ' ' + defaultValue + ' ' + comment + ',\n'
             cols_ddl += col_ddl
 
         primaryLine = ''
         if len(primaryKey) > 0:
-           primaryLine = 'PRIMARY KEY (' + primaryKey + ')\n'
+            primaryLine = 'PRIMARY KEY (' + primaryKey + ')\n'
 
         if len(primaryLine) > 0:
             tab_ddl += drop_table + tab_name + ';\n' + 'CREATE TABLE ' + tab_name + \
-            '(\n' + cols_ddl + primaryLine + ') ' + \
-            tab_comment + ';'
+                       '(\n' + cols_ddl + primaryLine + ') ' + \
+                       tab_comment + ';'
         else:
             cols_ddl = cols_ddl[:-2] + '\n'
             tab_ddl += drop_table + tab_name + ';\n' + 'CREATE TABLE ' + tab_name + \
-            '(\n' + cols_ddl  + ') ' + \
-            tab_comment + ';'
+                       '(\n' + cols_ddl + ') ' + \
+                       tab_comment + ';'
 
         ddl_sql = ddl_sql + tab_ddl + '\n\n' if len(tab_ddl) > 0 else ddl_sql
         ddl_all_sql += ddl_sql
