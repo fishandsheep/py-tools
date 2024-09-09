@@ -3,3 +3,5 @@ streamlit==1.37.0
 py-sudoku==1.0.3
 openpyxl==3.1.2
 numpy==1.26.4
+wordcloud==1.9.3
+jieba==0.42.1
