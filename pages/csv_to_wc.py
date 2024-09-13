@@ -11,7 +11,10 @@ def cloud(image, parse_data, max_word, max_font, random):
     stopwords = set(STOPWORDS)
     stopwords.update([])
     
-    wc = WordCloud(font_path='/root/py-tools/images/SIMSUN.TTC',background_color="white", colormap="hot", max_words=max_word, mask=image,
+    # create coloring from image
+    image_colors = ImageColorGenerator(image)
+
+    wc = WordCloud(font_path='/root/py-tools/images/SIMSUN.TTC',background_color="white", max_words=max_word, mask=image,
     stopwords=stopwords, max_font_size=max_font, random_state=random)
 
     # generate word cloud
@@ -22,8 +25,7 @@ def cloud(image, parse_data, max_word, max_font, random):
         word_str += " ".join(seg_list)  
     wc.generate(word_str)
 
-    # create coloring from image
-    image_colors = ImageColorGenerator(image)
+   
 
     # show the figure
     plt.figure(figsize=(100,100))
@@ -35,15 +37,17 @@ def cloud(image, parse_data, max_word, max_font, random):
 
     for ax in axes:
         ax.set_axis_off()
-    st.pyplot()
+    st.pyplot(fig)
 
 def main():
-    st.write("# Text Summarization with a WordCloud")
+    st.write("# CSV file to WordCloud Image")
     max_word = st.sidebar.slider("Max words", 200, 3000, 200)
     max_font = st.sidebar.slider("Max Font Size", 50, 350, 60)
     random = st.sidebar.slider("Random State", 30, 100, 42 )
+
+    uploaded_file = st.file_uploader("Choose a csv file", ['csv'])
     image = st.file_uploader("Choose a image file", ['png','jpg','svg'])
-    uploaded_file = st.file_uploader("Choose a csv", ['csv'])
+   
        
     if image and uploaded_file is not None:
         if st.button("Plot"):
